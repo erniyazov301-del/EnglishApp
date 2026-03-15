@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linguist Minimal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Linguist Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,24 +14,19 @@
             --border: #e5e5e7;
             --success: #34c759;
             --error: #ff3b30;
-            --font-size: 16px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
-            font-size: var(--font-size);
             line-height: 1.6;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            transition: font-size 0.2s;
+            margin: 0;
         }
 
-        /* Layout */
         header {
             padding: 2rem 1rem;
             max-width: 800px;
@@ -51,171 +44,151 @@
             font-weight: 500;
             color: #86868b;
             margin-left: 1.5rem;
-            transition: color 0.2s;
+            padding: 5px 0;
         }
 
         nav button.active { color: var(--text); border-bottom: 2px solid var(--text); }
 
-        main {
-            flex: 1;
-            max-width: 700px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 1rem;
-        }
+        main { flex: 1; max-width: 700px; margin: 0 auto; width: 100%; padding: 1rem; }
 
-        /* Components */
         .card {
             background: var(--subtle);
-            border-radius: 12px;
-            padding: 2rem;
+            border-radius: 16px;
+            padding: 2.5rem;
             margin-top: 2rem;
             text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            margin: 1rem 0;
-            font-size: inherit;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
             outline: none;
+            text-align: center;
         }
 
         button.primary {
             background: var(--text);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            transition: transform 0.1s;
+        }
+
+        button.primary:active { transform: scale(0.98); }
+
+        .hint-box {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            text-align: left;
+        }
+
+        .translation {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 1rem 0;
+            display: none;
         }
 
         .hidden { display: none; }
-
-        /* Setup Screen */
-        #setup-screen select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        /* Grammar Section */
-        .grammar-item {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .example {
-            display: block;
-            font-style: italic;
-            color: #6e6e73;
-            margin-top: 0.5rem;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
+        .progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 1rem 0; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
     </style>
 </head>
 <body>
 
 <header id="main-nav" class="hidden">
-    <div style="font-weight: 600; font-size: 1.2rem;">Linguist</div>
+    <div style="font-weight: 600; font-size: 1.3rem;">Linguist</div>
     <nav>
         <button onclick="showSection('test')" id="nav-test">Tests</button>
         <button onclick="showSection('cards')" id="nav-cards">Cards</button>
-        <button onclick="showSection('grammar')" id="nav-grammar">Grammar</button>
     </nav>
 </header>
 
 <main>
     <section id="setup-screen" class="card">
-        <h2>Welcome</h2>
-        <p style="color: #86868b; margin-bottom: 1.5rem;">Configure your experience</p>
-        <label>English Level</label>
-        <select id="user-level">
-            <option value="A1">A1 - Beginner</option>
-            <option value="B1">B1 - Intermediate</option>
-            <option value="C1">C1 - Advanced</option>
+        <h2>Настройка обучения</h2>
+        <p style="color: #86868b; margin-bottom: 2rem;">Выберите ваш уровень и предпочтения</p>
+        <select id="user-level" style="width: 100%; padding: 12px; border-radius: 8px; margin-bottom: 1rem;">
+            <option value="A1">A1 - Начальный</option>
+            <option value="B1">B1 - Средний</option>
+            <option value="C1">C1 - Продвинутый</option>
         </select>
-        <label>Font Size</label>
-        <select id="user-font">
-            <option value="14px">Small</option>
-            <option value="16px" selected>Medium</option>
-            <option value="20px">Large</option>
+        <select id="user-font" style="width: 100%; padding: 12px; border-radius: 8px; margin-bottom: 2rem;">
+            <option value="16px">Обычный шрифт</option>
+            <option value="20px">Крупный шрифт</option>
         </select>
-        <button class="primary" onclick="saveSetup()">Start Learning</button>
+        <button class="primary" onclick="saveSetup()">Начать учиться</button>
     </section>
 
     <section id="test-section" class="hidden">
-        <div class="progress-bar"><div id="test-progress" class="progress-fill" style="width: 0%"></div></div>
-        <p id="test-counter" style="font-size: 0.8rem; color: #86868b;">Sentence 1 / 500</p>
+        <div class="progress-bar"><div id="test-progress" class="progress-fill"></div></div>
+        <p id="test-counter" style="font-size: 0.85rem; color: #86868b;"></p>
         <div class="card">
-            <h3 id="target-sentence">Loading...</h3>
-            <input type="text" id="test-input" placeholder="Type translation here..." autocomplete="off">
-            <div id="feedback" style="margin-bottom: 1rem; font-weight: 500;"></div>
-            <button id="check-btn" class="primary" onclick="checkAnswer()">Check</button>
+            <h3 id="target-sentence" style="font-size: 1.4rem;"></h3>
+            <input type="text" id="test-input" placeholder="Введите перевод на английский..." autocomplete="off">
+            <div id="feedback" style="margin-bottom: 1rem; font-weight: 600;"></div>
+            <div id="grammar-hint" class="hint-box"></div>
+            <button id="check-btn" class="primary" onclick="checkAnswer()">Проверить</button>
         </div>
     </section>
 
     <section id="cards-section" class="hidden">
         <div class="card">
-            <h2 id="card-word" style="font-size: 2.5rem; margin-bottom: 2rem;">Word</h2>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button onclick="nextCard(false)" style="padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer;">Repeat</button>
-                <button onclick="nextCard(true)" class="primary">Know</button>
+            <p style="font-size: 0.9rem; color: #86868b;">Как это переводится?</p>
+            <h2 id="card-word" style="font-size: 3rem; margin: 1.5rem 0;">Word</h2>
+            <div id="card-translation" class="translation">Перевод</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 2rem;">
+                <button id="show-translate-btn" onclick="showTranslation()" style="background: none; border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; cursor: pointer;">Посмотреть перевод</button>
+                <div id="card-controls" class="hidden" style="display: flex; gap: 10px; width: 100%; justify-content: center;">
+                    <button onclick="nextCard(false)" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer;">Повторить</button>
+                    <button onclick="nextCard(true)" class="primary" style="flex: 1;">Знаю</button>
+                </div>
             </div>
-        </div>
-    </section>
-
-    <section id="grammar-section" class="hidden">
-        <div class="grammar-item">
-            <h3>Present Simple</h3>
-            <p>Used for habits and general truths.</p>
-            <span class="example">I work in a laboratory.</span>
-        </div>
-        <div class="grammar-item">
-            <h3>Present Perfect</h3>
-            <p>Used for actions with a result in the present.</p>
-            <span class="example">I have finished the analysis.</span>
-        </div>
-        <div class="grammar-item">
-            <h3>Passive Voice</h3>
-            <p>Focuses on the action, not the doer.</p>
-            <span class="example">The sample was analyzed via HPLC.</span>
         </div>
     </section>
 </main>
 
 <script>
-    // Data (Simplified for Demo, expandable to 500+)
     const data = {
-        A1: { sentences: [{q: "Я пью кофе", a: "I drink coffee"}, {q: "У меня есть кот", a: "I have a cat"}], words: ["Apple", "Book", "House"] },
-        B1: { sentences: [{q: "Я работаю здесь уже пять лет", a: "I have been working here for five years"}], words: ["Consistent", "Evidence", "Impact"] },
-        C1: { sentences: [{q: "Результаты подтверждают гипотезу", a: "The results corroborate the hypothesis"}], words: ["Ambiguous", "Pragmatic", "Eloquent"] }
+        A1: {
+            sentences: [
+                {q: "Я пью кофе каждое утро", a: "I drink coffee every morning", hint: "<b>Present Simple:</b> Используется для регулярных действий. Глагол остается в начальной форме для 'I'."},
+                {q: "У неё есть машина", a: "She has a car", hint: "<b>Have/Has:</b> Для третьего лица (he, she, it) мы используем 'has'."}
+            ],
+            words: [
+                {en: "Substance", ru: "Вещество"},
+                {en: "Solution", ru: "Раствор"},
+                {en: "Research", ru: "Исследование"}
+            ]
+        },
+        B1: {
+            sentences: [
+                {q: "Я работаю здесь уже пять лет", a: "I have been working here for five years", hint: "<b>Present Perfect Continuous:</b> Используется для действий, которые начались в прошлом и продолжаются до сих пор."}
+            ],
+            words: [
+                {en: "Analyze", ru: "Анализировать"},
+                {en: "Consistent", ru: "Последовательный"}
+            ]
+        }
     };
 
-    let state = {
-        level: 'A1',
-        testIndex: 0,
-        cardIndex: 0,
-        isSetup: false
-    };
+    let state = { level: 'A1', testIndex: 0, cardIndex: 0 };
 
-    // Initialization
     window.onload = () => {
-        const saved = localStorage.getItem('linguist_state');
+        const saved = localStorage.getItem('linguist_v2');
         if (saved) {
             state = JSON.parse(saved);
             applySettings();
@@ -226,8 +199,7 @@
     function saveSetup() {
         state.level = document.getElementById('user-level').value;
         document.body.style.fontSize = document.getElementById('user-font').value;
-        state.isSetup = true;
-        localStorage.setItem('linguist_state', JSON.stringify(state));
+        localStorage.setItem('linguist_v2', JSON.stringify(state));
         applySettings();
         showSection('test');
     }
@@ -240,7 +212,7 @@
     }
 
     function showSection(name) {
-        ['test', 'cards', 'grammar'].forEach(s => {
+        ['test', 'cards'].forEach(s => {
             document.getElementById(`${s}-section`).classList.add('hidden');
             document.getElementById(`nav-${s}`).classList.remove('active');
         });
@@ -248,47 +220,63 @@
         document.getElementById(`nav-${name}`).classList.add('active');
     }
 
-    // Test Logic
     function loadTest() {
-        const sentences = data[state.level].sentences;
-        const current = sentences[state.testIndex % sentences.length];
+        const levelData = data[state.level] || data['A1'];
+        const current = levelData.sentences[state.testIndex % levelData.sentences.length];
         document.getElementById('target-sentence').innerText = current.q;
-        document.getElementById('test-counter').innerText = `Sentence ${state.testIndex + 1} / 500`;
+        document.getElementById('test-counter').innerText = `Предложение ${state.testIndex + 1} / 500`;
         document.getElementById('test-progress').style.width = `${((state.testIndex + 1) / 500) * 100}%`;
+        document.getElementById('grammar-hint').style.display = 'none';
+        document.getElementById('feedback').innerText = "";
     }
 
     function checkAnswer() {
         const input = document.getElementById('test-input').value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
-        const sentences = data[state.level].sentences;
-        const correct = sentences[state.testIndex % sentences.length].a.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+        const levelData = data[state.level] || data['A1'];
+        const current = levelData.sentences[state.testIndex % levelData.sentences.length];
+        const correct = current.a.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
         
         const feedback = document.getElementById('feedback');
+        const hintBox = document.getElementById('grammar-hint');
+
         if (input === correct) {
             feedback.style.color = 'var(--success)';
-            feedback.innerText = "Correct!";
+            feedback.innerText = "Правильно!";
+            hintBox.innerHTML = current.hint;
+            hintBox.style.display = 'block';
+            
             setTimeout(() => {
                 state.testIndex++;
                 document.getElementById('test-input').value = "";
-                feedback.innerText = "";
+                localStorage.setItem('linguist_v2', JSON.stringify(state));
                 loadTest();
-                localStorage.setItem('linguist_state', JSON.stringify(state));
-            }, 1000);
+            }, 3500);
         } else {
             feedback.style.color = 'var(--error)';
-            feedback.innerText = `Wrong. Correct: ${sentences[state.testIndex % sentences.length].a}`;
+            feedback.innerText = `Не совсем. Верно: ${current.a}`;
         }
     }
 
-    // Cards Logic
     function loadCard() {
-        const words = data[state.level].words;
-        document.getElementById('card-word').innerText = words[state.cardIndex % words.length];
+        const levelData = data[state.level] || data['A1'];
+        const current = levelData.words[state.cardIndex % levelData.words.length];
+        document.getElementById('card-word').innerText = current.en;
+        document.getElementById('card-translation').innerText = current.ru;
+        document.getElementById('card-translation').style.display = 'none';
+        document.getElementById('show-translate-btn').style.display = 'block';
+        document.getElementById('card-controls').classList.add('hidden');
+    }
+
+    function showTranslation() {
+        document.getElementById('card-translation').style.display = 'block';
+        document.getElementById('show-translate-btn').style.display = 'none';
+        document.getElementById('card-controls').classList.remove('hidden');
     }
 
     function nextCard(know) {
         state.cardIndex++;
+        localStorage.setItem('linguist_v2', JSON.stringify(state));
         loadCard();
-        localStorage.setItem('linguist_state', JSON.stringify(state));
     }
 </script>
 </body>
